@@ -29,7 +29,12 @@ def read_files(file_names):
 
             # Create the Ingredient objects 
             for line in recipe:
-                ingredient_name = line.split('oz')[1][1:-1]
+
+                if (line.find("oz") != -1):
+                    ingredient_name = line.split('oz')[1][1:-1]
+                else:
+                    ingredient_name = " ".join(line.split()[1:])
+                
                 line_array = line.split()
                 measurement = line_array[0]
                 ingredient = create_ingredients(ingredient_name,float(measurement))
