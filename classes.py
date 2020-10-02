@@ -9,6 +9,7 @@ Description: This file holds the Recipe and Ingredient classes used throughout t
 
 import random
 
+
 class Recipe(object):
     def __init__(self, name, ingredients):
         self.name = name
@@ -25,7 +26,7 @@ class Recipe(object):
     def __str__(self):
         """Returns a string representation of this Recipe."""
         return f'Name: {self.name} Ingredients: {self.ingredients}'
-    
+
     def print_ingredients(self):
         """Prints all of the ingredients for this Recipe."""
         for ingredient in self.ingredients:
@@ -38,18 +39,18 @@ class Recipe(object):
             names_list.append(ingredient.name)
             print(ingredient.name)
         return names_list
-    
+
     def get_toppings(self):
-        """Returns the indexes of all the toppings in the recipe"""
-        topping_list = []
-        for ingredient in self.ingredients:
+        """Returns the indexes of all the toppings in the recipe and all of the ingredient objects itself"""
+        print("*in topping get*:")
+        topping_list = [[], []]
+        for i, ingredient in enumerate(self.ingredients):
             if '*' in ingredient.name:
-                print("****TOPPING***", ingredient.name)
-                topping_list.append(ingredient)
+                topping_list[0].append(i)
+                topping_list[1].append(ingredient)
         return topping_list
 
 
-        
 class Ingredient(object):
     def __init__(self, name, amount):
         self.name = name
@@ -58,4 +59,3 @@ class Ingredient(object):
     def __str__(self):
         """Returns a string representation of this Ingredient."""
         return f"Ingredient: {self.name}, Amount: {self.amount}g"
-

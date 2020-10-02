@@ -12,17 +12,19 @@ Sept. 30: change_ingredient_name function has not broken the code after 30 runs.
 import random
 from read_files import read_files, file_names
 from get_functions import pivot_ingredients, get_probability,  get_top_fitness
-from mutations import add_ingredient, ingredient_from_set, delete_ingredient, change_ingredient_name, change_ingredient_amount
+from mutations import add_ingredient, ingredient_from_set, delete_ingredient, change_ingredient_name, change_ingredient_amount, change_topping
 from classes import Recipe, Ingredient
 
+
 def main():
-    #prepping first generation from the inspiring set
-    recipe_names = file_names()
+    # prepping first generation from the inspiring set
+    recipe_names = file_names("recipes/*.txt")
+    topping_names = file_names("toppings/*.txt")
     parent = read_files(recipe_names)
-   
-    #creating n number of generations
+
+    # creating n number of generations
     num_of_generations = 2
-    num_of_offspring = 0 
+    num_of_offspring = 0
 
     # Each step in this outer for loop is the creation
     # of a new generation
@@ -32,21 +34,21 @@ def main():
 
         # Each step in the inner for loop is creating a new Recipe for the offspring list
         for y in range(1, 7):
-            # getting parent recipes 
-            two_recipes = get_probability(parent) 
+            # getting parent recipes
+            two_recipes = get_probability(parent)
 
-            # create the new ingredients list 
-            genetic_crossover = pivot_ingredients(two_recipes[0].ingredients, two_recipes[1].ingredients)
-            
+            # create the new ingredients list
+            genetic_crossover = pivot_ingredients(
+                two_recipes[0].ingredients, two_recipes[1].ingredients)
+
             num_of_offspring += 1
             name = "new_recipe_" + str(num_of_offspring)
-            
+
             offspring = Recipe(name, genetic_crossover)
 
-            
             # Chooses a random mutation method my asigning each function to an int int the range [0,3]
-            generate_random_int = random.randint(0, 3)
-            
+            generate_random_int = random.randint(0, 4)
+
             if (generate_random_int == 0):
                 print("\n", "*** changing ingredient name ***")
                 change_ingredient_name(offspring, recipe_names)
@@ -56,21 +58,24 @@ def main():
             elif (generate_random_int == 2):
                 print("\n", "*** adding an ingredient ***")
                 add_ingredient(offspring, recipe_names)
-            else: 
-                print("\n","*** deleting an ingredient ***")
+            elif(generate_random_int == 3):
+                print("\n", "*** deleting an ingredient ***")
                 delete_ingredient(offspring)
-            
+            else:
+                print("\n", "*** changing a topping***")
+                change_topping(offspring, topping_names)
+
             offspring_list.append(offspring)
 
             print("\n", "----- current offspring list -----")
             for recipe in offspring_list:
                 print("\n", recipe.name)
-        
+
         # Calculating the top 50% of each list(parent, offspring)
         offspring_half = get_top_fitness(offspring_list)
         parent_half = get_top_fitness(parent)
 
-        # Create the final array of the 6 fittest Recipes 
+        # Create the final array of the 6 fittest Recipes
         parent = offspring_half + parent_half
 
     print("\n", "---------------------")
@@ -79,7 +84,7 @@ def main():
     for recipe in parent:
         print("\n", recipe.name)
         recipe.print_ingredients()
-        recipe.get_toppings()
+        recipe.get_toppings()[1]
 
     print("--------------")
     print("ENJOY :)", "\n")
