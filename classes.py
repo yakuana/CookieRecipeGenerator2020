@@ -58,4 +58,7 @@ class Ingredient(object):
 
     def __str__(self):
         """Returns a string representation of this Ingredient."""
-        return f"Ingredient: {self.name}, Amount: {self.amount}g"
+        name = self.name
+        if '\n' in name:
+            name = name[:-1]
+        return f"Ingredient: {name}, Amount: {self.amount}g"
